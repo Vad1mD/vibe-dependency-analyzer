@@ -1,3 +1,6 @@
+# Note
+This whole project was made in Vibe coding in mind with some manual tweaks
+
 # Dependency Analyzer
 
 A tool for analyzing and visualizing dependencies in JavaScript/TypeScript projects.
