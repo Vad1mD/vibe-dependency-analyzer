@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+// Execute the JavaScript scanner
+require('../src/index.js'); 

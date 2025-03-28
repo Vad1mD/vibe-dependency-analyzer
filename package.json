@@ -1,0 +1,22 @@
+{
+  "name": "dependency-analyzer",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "description": "A tool for analyzing and visualizing dependencies in JavaScript/TypeScript projects",
+  "scripts": {
+    "scanner": "cd packages/scanner && npm start",
+    "visualizer": "cd packages/visualizer && npm start"
+  },
+  "keywords": [
+    "dependency",
+    "analyzer",
+    "visualization",
+    "javascript",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT"
+} 

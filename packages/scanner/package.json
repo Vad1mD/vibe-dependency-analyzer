@@ -1,0 +1,14 @@
+{
+  "name": "@dependency-analyzer/scanner",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "bin": {
+    "dependency-scanner": "./bin/scanner"
+  },
+  "scripts": {
+    "start": "./bin/scanner"
+  },
+  "dependencies": {
+    "commander": "^11.1.0"
+  }
+} 
