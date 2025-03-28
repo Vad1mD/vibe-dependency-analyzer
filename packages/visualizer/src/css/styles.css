@@ -1,0 +1,412 @@
+:root {
+    --background: #1e1e2e;
+    --text-primary: #cdd6f4;
+    --text-secondary: #a6adc8;
+    --accent: #89b4fa;
+    --accent-hover: #b4befe;
+    --node-default: #74c7ec;
+    --node-cycle: #f38ba8;
+    --panel: #313244;
+    --panel-border: #45475a;
+    --success: #a6e3a1;
+    --warning: #f9e2af;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background);
+    color: var(--text-primary);
+    line-height: 1.6;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+}
+
+/* Header styles */
+header {
+    padding: 1rem;
+    background-color: rgba(30, 30, 46, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--panel-border);
+    z-index: 10;
+    position: sticky;
+    top: 0;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+}
+
+/* Main container layout */
+.container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Sidebar styles */
+.sidebar {
+    background-color: var(--panel);
+    border-right: 1px solid var(--panel-border);
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--panel-border);
+}
+
+.sidebar h3 {
+    font-size: 1rem;
+    margin: 1rem 0 0.5rem;
+    color: var(--accent);
+}
+
+/* Stats panel */
+.stats {
+    background-color: rgba(49, 50, 68, 0.7);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    font-weight: bold;
+}
+
+/* Cycle list */
+.cycle-list {
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: rgba(49, 50, 68, 0.7);
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.cycle-item {
+    padding: 0.5rem;
+    border-radius: 4px;
+    background: rgba(243, 139, 168, 0.2);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cycle-item:hover {
+    background: rgba(243, 139, 168, 0.4);
+}
+
+/* Control elements */
+.controls {
+    margin: 1rem 0;
+}
+
+.control-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: var(--text-secondary);
+}
+
+select, input {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+}
+
+button {
+    background-color: var(--accent);
+    color: var(--background);
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: var(--accent-hover);
+}
+
+/* Visualization container */
+.vis-container {
+    position: relative;
+    overflow: hidden;
+}
+
+#graph {
+    width: 100%;
+    height: 100%;
+}
+
+/* Node styles */
+.node {
+    cursor: pointer;
+}
+
+.node circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.node.cyclic circle {
+    fill: var(--node-cycle);
+}
+
+.node.regular circle {
+    fill: var(--node-default);
+}
+
+.node.external circle {
+    fill: #f9e2af;
+}
+
+.link.external {
+    stroke: #f9e2af;
+    stroke-dasharray: 5,5;
+}
+
+.node.focus-node circle {
+    stroke: #f38ba8;
+    stroke-width: 3px;
+}
+
+/* Reset button styling */
+#focus-reset-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--panel);
+    color: var(--text-primary);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    z-index: 100;
+    display: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#focus-reset-btn:hover {
+    background-color: var(--accent);
+    color: var(--background);
+}
+
+/* Node text */
+.node text {
+    font-size: 10px;
+    font-family: sans-serif;
+    fill: var(--text-primary);
+}
+
+/* Link styles */
+.link {
+    fill: none;
+    stroke: var(--panel-border);
+    stroke-width: 1px;
+    opacity: 0.6;
+}
+
+.link.cyclic {
+    stroke: var(--node-cycle);
+    stroke-width: 2px;
+    opacity: 0.7;
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    background-color: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    max-width: 300px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.tooltip h4 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--panel-border);
+    padding-bottom: 0.3rem;
+}
+
+.tooltip p {
+    margin-bottom: 0.3rem;
+}
+
+.tooltip .circular {
+    color: var(--node-cycle);
+    font-weight: bold;
+}
+
+.tooltip .deployment {
+    display: inline-block;
+    padding: 2px 5px;
+    margin: 2px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    background-color: var(--accent);
+    color: var(--background);
+}
+
+/* Settings panel */
+.settings {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    background-color: var(--panel);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+}
+
+/* File upload area */
+.file-upload {
+    background-color: rgba(49, 50, 68, 0.7);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.file-upload-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.drag-area {
+    border: 2px dashed var(--panel-border);
+    border-radius: 8px;
+    padding: 2rem 1rem;
+    margin-top: 1rem;
+    transition: all 0.2s;
+}
+
+.drag-area.active {
+    border-color: var(--accent);
+    background-color: rgba(137, 180, 250, 0.1);
+}
+
+/* Loader/spinner */
+.loader {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(30, 30, 46, 0.8);
+    z-index: 20;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--panel-border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Zoom controls */
+.zoom-controls {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 10;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.zoom-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--panel);
+    color: var(--text-primary);
+    border: 1px solid var(--panel-border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.zoom-btn:hover {
+    background-color: var(--accent);
+    color: var(--background);
+}
+
+/* Search box */
+.search-box {
+    margin-top: 1rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.6rem;
+    background-color: var(--background);
+    color: var(--text-primary);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+}
+
+/* Emergency reset button */
+#emergency-reset {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 9999;
+    background: red;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+} 
