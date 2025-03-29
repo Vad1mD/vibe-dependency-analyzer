@@ -9,7 +9,6 @@ const circularDepsEl = document.getElementById('circular-deps');
 const cycleListEl = document.getElementById('cycle-list');
 const deploymentModesSection = document.getElementById('deployment-modes-section');
 const deploymentModesList = document.getElementById('deployment-modes-list');
-const layoutTypeSelect = document.getElementById('layout-type');
 const nodeSizeInput = document.getElementById('node-size');
 const linkStrengthInput = document.getElementById('link-strength');
 const highlightCyclesBtn = document.getElementById('highlight-cycles-btn');
@@ -261,15 +260,11 @@ function createGraph() {
             }
         });
     
-    // Update layout based on select
-    updateLayout(currentLayout);
+    // Update layout - always using force layout
+    updateLayout('force');
 }
 
 // Set up event listeners for controls
-layoutTypeSelect.addEventListener('change', function() {
-    updateLayout(this.value);
-});
-
 nodeSizeInput.addEventListener('input', function() {
     nodeSize = parseInt(this.value);
     nodeElements.selectAll('circle').attr('r', nodeSize);
