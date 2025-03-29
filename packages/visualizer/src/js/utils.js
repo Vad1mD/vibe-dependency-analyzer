@@ -160,8 +160,9 @@ function hideTooltip() {
  * Handle node click - focus on node and its dependencies
  */
 function nodeClicked(event, d) {
-    // If we're already in focus mode for this node, do nothing
+    // If we're already in focus mode for this node, reset the view
     if (d3.select(this).classed('focus-node')) {
+        window.resetNodeFocus();
         return;
     }
     

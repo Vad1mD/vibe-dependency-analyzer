@@ -195,7 +195,7 @@ button:hover {
 }
 
 .node.focus-node circle {
-    stroke: #f38ba8;
+    stroke: #fab387;
     stroke-width: 3px;
 }
 
