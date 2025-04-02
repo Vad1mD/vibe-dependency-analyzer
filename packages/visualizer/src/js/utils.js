@@ -335,6 +335,13 @@ function nodeClicked(event, d) {
     document.getElementById('focus-reset-btn').style.display = 'block';
     document.getElementById('emergency-reset').style.display = 'block';
     
+    // Show export button
+    const exportBtn = document.getElementById('export-graph-btn');
+    if (exportBtn) {
+        exportBtn.style.display = 'block';
+        exportBtn.title = `Export '${d.id}' and its dependencies as JSON`;
+    }
+    
     // Update node selector to show the currently focused node
     const nodeSelector = document.getElementById('node-selector');
     if (nodeSelector) {
@@ -424,4 +431,108 @@ function dragended(event) {
     if (!event.active) simulation.alphaTarget(0);
     event.subject.fx = null;
     event.subject.fy = null;
-} 
+}
+
+/**
+ * Export the selected graph as JSON
+ */
+function exportSelectedGraph() {
+    // Find the selected node
+    const selectedNode = nodes.find(node => 
+        nodeElements.filter(n => n.id === node.id).classed('focus-node')
+    );
+    
+    if (!selectedNode) {
+        console.error('No node selected');
+        return;
+    }
+    
+    // Get all dependencies of the selected node
+    const dependencies = getNodeDependencies(selectedNode);
+    
+    // Add the selected node itself to the list
+    dependencies.push(selectedNode.id);
+    
+    // Create a subset of the graph with only the selected node and its dependencies
+    const exportedGraph = {
+        summary: {
+            totalFiles: dependencies.length,
+            totalDependencies: 0,
+            filesWithCircularDependencies: 0
+        },
+        nodes: [],
+        cycles: []
+    };
+    
+    // Add nodes to the exported graph
+    dependencies.forEach(depId => {
+        const node = nodes.find(n => n.id === depId);
+        if (node) {
+            exportedGraph.nodes.push({...node});
+        }
+    });
+    
+    // Count total dependencies and update circular dependencies info
+    let totalDeps = 0;
+    let circularFiles = 0;
+    
+    exportedGraph.nodes.forEach(node => {
+        if (node.dependencies) {
+            // Filter dependencies to only include those that are in our subset
+            node.dependencies = node.dependencies.filter(dep => {
+                const depId = typeof dep === 'object' ? dep.path : dep;
+                return dependencies.includes(depId);
+            });
+            
+            totalDeps += node.dependencies.length;
+        }
+        
+        if (node.hasCircularDependency) {
+            circularFiles++;
+        }
+    });
+    
+    exportedGraph.summary.totalDependencies = totalDeps;
+    exportedGraph.summary.filesWithCircularDependencies = circularFiles;
+    
+    // Add cycles that include nodes in our subset
+    if (graph.cycles) {
+        graph.cycles.forEach(cycle => {
+            const filteredCycle = cycle.filter(nodeId => dependencies.includes(nodeId));
+            if (filteredCycle.length > 1) {
+                exportedGraph.cycles.push(filteredCycle);
+            }
+        });
+    }
+    
+    // Include deployment modes if they exist in the original graph
+    if (graph.deploymentModes) {
+        exportedGraph.deploymentModes = {};
+        Object.keys(graph.deploymentModes).forEach(mode => {
+            const fileCount = exportedGraph.nodes.filter(node => 
+                node.deploymentModes && node.deploymentModes.includes(mode)
+            ).length;
+            
+            if (fileCount > 0) {
+                exportedGraph.deploymentModes[mode] = {
+                    fileCount
+                };
+            }
+        });
+    }
+    
+    // Download the JSON file
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportedGraph, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "exported-graph.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+// Make exportSelectedGraph accessible globally
+window.exportSelectedGraph = exportSelectedGraph; 
+
+// Ensure the export functionality is available when a node is selected
+console.log('Export functionality initialized'); 

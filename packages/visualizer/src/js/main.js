@@ -15,6 +15,7 @@ const linkStrengthInput = document.getElementById('link-strength');
 const highlightCyclesBtn = document.getElementById('highlight-cycles-btn');
 const searchInput = document.getElementById('search-input');
 const focusResetBtn = document.getElementById('focus-reset-btn');
+const exportGraphBtn = document.getElementById('export-graph-btn');
 const resetViewBtn = document.getElementById('reset-view');
 const loader = document.querySelector('.loader');
 const tooltipEl = document.getElementById('tooltip');
@@ -351,6 +352,11 @@ zoomReset.addEventListener('click', function() {
     );
 });
 
+// Export button listener
+if (exportGraphBtn) {
+    exportGraphBtn.addEventListener('click', exportSelectedGraph);
+}
+
 // Handle window resize
 window.addEventListener('resize', function() {
     width = svg.node().parentElement.clientWidth;
@@ -393,6 +399,11 @@ window.resetNodeFocus = function() {
     // Hide reset buttons
     if (focusResetBtn) {
         focusResetBtn.style.display = 'none';
+    }
+    
+    // Hide export button
+    if (exportGraphBtn) {
+        exportGraphBtn.style.display = 'none';
     }
     
     const emergencyResetBtn = document.getElementById('emergency-reset');

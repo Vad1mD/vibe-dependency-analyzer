@@ -200,10 +200,9 @@ button:hover {
 }
 
 /* Reset button styling */
-#focus-reset-btn {
+#focus-reset-btn, #export-graph-btn {
     position: absolute;
     top: 20px;
-    right: 20px;
     background-color: var(--panel);
     color: var(--text-primary);
     border: 1px solid var(--panel-border);
@@ -216,7 +215,18 @@ button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-#focus-reset-btn:hover {
+#focus-reset-btn {
+    right: 20px;
+}
+
+#export-graph-btn {
+    right: 120px;
+    background-color: var(--success);
+    color: var(--background);
+    font-weight: bold;
+}
+
+#focus-reset-btn:hover, #export-graph-btn:hover {
     background-color: var(--accent);
     color: var(--background);
 }
